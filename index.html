@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Meta tags and title -->
+        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GooberQR | Generate QR Codes</title>
+        <link rel="icon" href="https://i.postimg.cc/1nmfgPDZ/Goober-QR.png" type="image/x-icon">
+    </head>
+    <body>
+       
+        <canvas id="snowCanvas"></canvas>
+
+        <div class="settings-wrap">
+    <button type="button" id="settings-btn" class="settings-btn" aria-label="Open QR settings" aria-expanded="false" aria-controls="settings-panel">
+        <span aria-hidden="true">&#9881;</span>
+    </button>
+    <div id="settings-panel" class="settings-panel" hidden>
+        <label for="qr-size">Resize QR Code (px)</label>
+        <div class="size-controls">
+            <input type="number" id="qr-size" min="1" max="2000" step="0.1" value="160" inputmode="decimal">
+        </div>
+        <div class="setting-item" style="margin-top: 10px;">
+            <label for="safety-mode" class="safety-mode-label">
+                <input type="checkbox" id="safety-mode" checked>
+                <span class="safety-mode-text">Safety Mode (Logo Border)</span>
+            </label>
+        </div>
+    </div>
+</div>
+        
+        <!-- Main content -->
+        <div class="card">
+    <h1><strong>GooberQR</strong></h1>
+    <p>Generate QR Codes for Free!</p>
+    <input type="text" id="qr-input" placeholder="Input your text or URL here">
+    <div id="qrcode"></div>
+    <div class="color-pickers">
+    <label>
+        QR Color:
+        <input type="color" id="fg-color" value="#000000">
+    </label>
+    <label>
+        BG Color:
+        <input type="color" id="bg-color" value="#ffffff">
+    </label>
+</div>
+<div class="logo-picker">
+    <label for="logo-input" class="custom-file-btn">
+        <span>Choose Center Logo</span>
+        <span id="file-name-display" style="font-size: 0.75rem; opacity: 0.7;">No file chosen</span>
+    </label>
+    <input type="file" id="logo-input" accept="image/*" style="display: none;">
+</div>
+    <button id="download-btn">Download QR Code</button>
+
+    <footer>
+    <p class="footer-website">
+        Check out my other projects on <a href="https://cristiann5.github.io" style="color: #2be23d5c;">My Personal Website</a>
+    </p>
+    <span class="footer-credit">Made with ♡ by Cristian55 (^-^)</span>
+</footer>
+</div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
