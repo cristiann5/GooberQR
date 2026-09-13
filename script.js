@@ -166,7 +166,6 @@ function saveQrBlob(blob) {
     document.body.removeChild(link);
     setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 }
-
 // 5. Download Button Logic (Handles both plain QR and Logo Overlay)
 document.getElementById("download-btn").addEventListener("click", function () {
     const qrImage = document.querySelector("#qrcode img:not(.qr-center-logo)");
