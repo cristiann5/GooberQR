@@ -9,6 +9,7 @@ const qrSizeInput = document.getElementById("qr-size");
 const qrUnitInput = document.getElementById("qr-unit");
 const settingsButton = document.getElementById("settings-btn");
 const settingsPanel = document.getElementById("settings-panel");
+const safetyModeCheckbox = document.getElementById("safety-mode");
 
 let uploadedLogoSrc = null;
 let qrRenderVersion = 0;
@@ -131,6 +132,7 @@ function updateQRCode() {
             logoImg.src = uploadedLogoSrc;
             logoImg.className = "qr-center-logo";
             qrContainer.appendChild(logoImg);
+            updateSafetyMode();
         }
     }, 50);
 }
@@ -142,6 +144,10 @@ updateQRCode();
 inputEl.addEventListener("input", scheduleQRCodeUpdate);
 fgColorInput.addEventListener("input", scheduleQRCodeUpdate);
 bgColorInput.addEventListener("input", scheduleQRCodeUpdate);
+
+if (safetyModeCheckbox) {
+    safetyModeCheckbox.addEventListener("change", updateSafetyMode);
+}
 
 settingsButton.addEventListener("click", function () {
     const isOpen = settingsPanel.hidden;
@@ -166,7 +172,8 @@ function saveQrBlob(blob) {
     document.body.removeChild(link);
     setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 }
-// 5. Download Button Logic (Handles both plain QR and Logo Overlay)
+
+// 5. Download Button Logic (HD Export & Conditional Safety Mode Border)
 document.getElementById("download-btn").addEventListener("click", function () {
     const qrImage = document.querySelector("#qrcode img:not(.qr-center-logo)");
     if (!qrImage) return;
@@ -179,8 +186,8 @@ document.getElementById("download-btn").addEventListener("click", function () {
     canvasExport.height = size;
     const ctxExport = canvasExport.getContext("2d");
     
-    ctxExport.imageSmoothingEnabled = true;
-    ctxExport.imageSmoothingQuality = 'high';
+    // Keep QR matrix blocks razor-sharp for HD
+    ctxExport.imageSmoothingEnabled = false;
 
     const qrImgObj = new Image();
     qrImgObj.crossOrigin = "anonymous";
@@ -196,21 +203,27 @@ document.getElementById("download-btn").addEventListener("click", function () {
         const logoObj = new Image();
         logoObj.src = uploadedLogoSrc;
         logoObj.onload = function () {
+            // Enable smooth scaling for the center logo
+            ctxExport.imageSmoothingEnabled = true;
+            ctxExport.imageSmoothingQuality = 'high';
+
             const logoSize = qrSize * 0.28125;
             const x = (size - logoSize) / 2;
             const y = (size - logoSize) / 2;
             const padding = 4;
 
-            ctxExport.fillStyle = "#ffffff";
-            ctxExport.fillRect(x - padding, y - padding, logoSize + (padding * 2), logoSize + (padding * 2));
+            const isSafetyActive = safetyModeCheckbox && safetyModeCheckbox.checked;
+
+            if (isSafetyActive) {
+                ctxExport.fillStyle = "#ffffff";
+                ctxExport.fillRect(x - padding, y - padding, logoSize + (padding * 2), logoSize + (padding * 2));
+            }
 
             ctxExport.drawImage(logoObj, x, y, logoSize, logoSize);
             canvasExport.toBlob(saveQrBlob, "image/png");
         };
     };
 });
-
-const safetyModeCheckbox = document.getElementById('safety-mode');
 
 function updateSafetyMode() {
     const centerLogoImg = document.querySelector('#qrcode img.qr-center-logo');

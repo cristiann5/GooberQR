@@ -70,10 +70,18 @@ body {
     text-align: left;
 }
 
-/* When safety mode is active, apply the border and radius */
+/* When safety mode is active, apply the border and background */
 #qrcode img.qr-center-logo.safety-on {
     border-radius: 8px !important;
     border: 2px solid #ffffff !important;
+    background: #ffffff !important;
+}
+
+/* When safety mode is OFF, remove border and background container */
+#qrcode img.qr-center-logo:not(.safety-on) {
+    border-radius: 0px !important;
+    border: 0px solid transparent !important;
+    background: transparent !important;
 }
 
 .safety-mode-label input[type="checkbox"] {
@@ -115,8 +123,7 @@ body {
     gap: 6px;
 }
 
-.size-controls input,
-.size-controls select {
+.size-controls input {
     min-width: 0;
     padding: 8px 9px;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -124,24 +131,16 @@ body {
     background: rgba(255, 255, 255, 0.07);
     color: #ffffff;
     outline: none;
-}
-
-.size-controls input {
     width: 100%;
 }
 
-.size-controls select {
-    width: 62px;
-}
-
-.size-controls input:focus,
-.size-controls select:focus {
+.size-controls input:focus {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
 .card {
     position: relative;
-    z-index: 10; /* Ensures card renders ON TOP of the snow */
+    z-index: 10;
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
@@ -165,6 +164,7 @@ p {
     color: #a0a0b0;
     margin-bottom: 25px;
 }
+
 input[type="text"] {
     width: 100%;
     padding: 12px 16px;
@@ -186,7 +186,9 @@ input[type="text"]:focus {
 input[type="text"]::placeholder {
     color: #707080;
 }
+
 #qrcode {
+    position: relative;
     display: flex;
     justify-content: center;
     margin: 20px 0;
@@ -194,6 +196,18 @@ input[type="text"]::placeholder {
 
 #qrcode img {
     border-radius: 0px;
+}
+
+#qrcode img.qr-center-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .color-pickers {
@@ -243,49 +257,7 @@ input[type="text"]::placeholder {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
 }
-.logo-picker {
-    margin-bottom: 15px;
-    font-size: 0.85rem;
-    color: #a0a0b0;
-}
 
-.logo-picker label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 8px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.logo-picker input[type="file"] {
-    color: #ffffff;
-    font-size: 0.8rem;
-    max-width: 180px;
-}
-
-/* Position the QR container relatively so we can place the logo on top */
-#qrcode {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-#qrcode img.qr-center-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 35px;
-    height: 35px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 2px solid #ffffff;
-    background: #ffffff;
-}
 .logo-picker {
     margin-bottom: 15px;
 }
@@ -303,20 +275,6 @@ input[type="text"]::placeholder {
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
-}
-#qrcode img.qr-center-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 45px;
-    height: 45px;
-    object-fit: contain;
-    border-radius: 0px;
-    border: 0px solid #ffffff;
-    background: #ffffff;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
 }
 
 .custom-file-btn:hover {
@@ -347,7 +305,7 @@ input[type="text"]::placeholder {
 footer {
     margin-top: 25px;
     padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08); /* Adds a subtle divider line */
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -356,11 +314,11 @@ footer {
 .footer-website, .footer-credit {
     font-size: 0.82rem;
     color: #a0a0b0;
-    margin-bottom: 0; /* Clears default paragraph margin */
+    margin-bottom: 0;
 }
 
 .footer-website a {
-    color: #04ff00; /* Neon green accent matching your glow effect */
+    color: #04ff00;
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.2s ease;
@@ -376,13 +334,12 @@ footer {
     color: #707080;
 }
 
-/* snow effect */
 #snowCanvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    pointer-events: none; /* Lets clicks pass through to your UI */
-    z-index: 0;          /* Keeps it behind the card */
+    pointer-events: none;
+    z-index: 0;
 }
